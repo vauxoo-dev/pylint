@@ -1,4 +1,4 @@
-# pylint: disable=R0903
+# pylint: disable=R0903,bad-docstring-quotes
 '''Test that a function is considered a method when looked up through a class.
 '''
 from __future__ import print_function

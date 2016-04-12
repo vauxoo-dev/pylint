@@ -186,8 +186,7 @@ def _fix_dot_imports(not_consumed):
     return sorted(names.items(), key=lambda a: a[1].fromlineno)
 
 def _find_frame_imports(name, frame):
-    """
-    Detect imports in the frame, with the required
+    """Detect imports in the frame, with the required
     *name*. Such imports can be considered assignments.
     Returns True if an import for the given name was found.
     """
@@ -1130,7 +1129,7 @@ class VariablesChecker(BaseChecker):
 
 
 class VariablesChecker3k(VariablesChecker):
-    '''Modified variables checker for 3k'''
+    """Modified variables checker for 3k"""
     # listcomp have now also their scope
 
     def visit_listcomp(self, node):

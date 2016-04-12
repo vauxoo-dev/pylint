@@ -174,8 +174,7 @@ def collect_string_fields(format_string):
         raise utils.IncompleteFormatString(format_string)
 
 def parse_format_method_string(format_string):
-    """
-    Parses a PEP 3101 format string, returning a tuple of
+    """Parses a PEP 3101 format string, returning a tuple of
     (keys, num_args, manual_pos_arg),
     where keys is the set of mapping keys in the format string, num_args
     is the number of arguments required by the format string and
@@ -423,8 +422,7 @@ class StringFormatChecker(BaseChecker):
         self._check_new_format_specifiers(node, fields, named)
 
     def _check_new_format_specifiers(self, node, fields, named):
-        """
-        Check attribute and index access in the format
+        """Check attribute and index access in the format
         string ("{0.a}" and "{0[a]}").
         """
         for key, specifiers in fields:

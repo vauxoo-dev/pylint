@@ -1,7 +1,7 @@
 '''
 Regression test for
 https://bitbucket.org/logilab/pylint/issue/128/attributeerror-when-parsing
-'''
+''' # pylint: disable=docstring-first-line-empty,bad-docstring-quotes
 from __future__ import with_statement
 
 def do_nothing():

@@ -1,4 +1,4 @@
-# pylint: disable=R0903
+# pylint: disable=R0903,docstring-first-line-empty
 """
 Simple test case for an annoying behavior in pylint.
 """

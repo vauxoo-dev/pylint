@@ -3,7 +3,7 @@ Check that instantiating a class with `abc.ABCMeta` as ancestor fails if it
 defines abstract methods.
 """
 
-# pylint: disable=too-few-public-methods, missing-docstring, no-init
+# pylint: disable=too-few-public-methods, missing-docstring, no-init, docstring-first-line-empty
 
 import abc
 

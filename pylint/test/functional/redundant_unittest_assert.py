@@ -1,4 +1,4 @@
-# pylint: disable=missing-docstring,too-few-public-methods
+# pylint: disable=missing-docstring,too-few-public-methods,docstring-first-line-empty,bad-docstring-quotes
 """
 http://www.logilab.org/ticket/355
 If you are using assertTrue or assertFalse and the first argument is a

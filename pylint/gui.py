@@ -52,10 +52,9 @@ def convert_to_string(msg):
     return "(%s) %s [%d]: %s" % (msg.C, module_object, msg.line, msg.msg)
 
 class BasicStream(object):
-    '''
-    used in gui reporter instead of writing to stdout, it is written to
+    """ used in gui reporter instead of writing to stdout, it is written to
     this stream and saved in contents
-    '''
+    """
     def __init__(self, gui):
         """init"""
         self.curline = ""

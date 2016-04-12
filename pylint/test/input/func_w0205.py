@@ -1,7 +1,7 @@
 """check different signatures"""
 from __future__ import print_function
 __revision__ = 0
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods,bad-docstring-quotes
 class Abcd(object):
     '''dummy'''
     def __init__(self):

@@ -206,8 +206,7 @@ def _is_none(node):
 
 
 def _has_abstract_methods(node):
-    """
-    Determine if the given `node` has abstract methods.
+    """Determine if the given `node` has abstract methods.
 
     The methods should be made abstract by decorating them
     with `abc` decorators.
@@ -1357,6 +1356,12 @@ class DocStringChecker(_BasicChecker):
                   'empty-docstring',
                   'Used when a module, function, class or method has an empty '
                   'docstring (it would be too easy ;).'),
+        'C0198': ('Bad docstring quotes in %s, expected """, given %s',
+                  'bad-docstring-quotes',
+                  'Used when docstring do not have triple double quotes.'),
+        'C0199': ('First line empty in %s docstring',
+                  'docstring-first-line-empty',
+                  'Used when blank line from the beginning of the docstring.'),
         }
     options = (('no-docstring-rgx',
                 {'default' : NO_REQUIRED_DOC_RGX,
@@ -1379,11 +1384,13 @@ class DocStringChecker(_BasicChecker):
                                            undocumented_function=0,
                                            undocumented_method=0,
                                            undocumented_class=0)
-    @check_messages('missing-docstring', 'empty-docstring')
+    @check_messages('missing-docstring', 'empty-docstring',
+                    'docstring-first-line-empty', 'bad-docstring-quotes')
     def visit_module(self, node):
         self._check_docstring('module', node)
 
-    @check_messages('missing-docstring', 'empty-docstring')
+    @check_messages('missing-docstring', 'empty-docstring',
+                    'docstring-first-line-empty', 'bad-docstring-quotes')
     def visit_classdef(self, node):
         if self.config.no_docstring_rgx.match(node.name) is None:
             self._check_docstring('class', node)
@@ -1397,7 +1404,8 @@ class DocStringChecker(_BasicChecker):
                 return True
         return False
 
-    @check_messages('missing-docstring', 'empty-docstring')
+    @check_messages('missing-docstring', 'empty-docstring',
+                    'docstring-first-line-empty', 'bad-docstring-quotes')
     def visit_functiondef(self, node):
         if self.config.no_docstring_rgx.match(node.name) is None:
             ftype = node.is_method() and 'method' or 'function'
@@ -1460,6 +1468,26 @@ class DocStringChecker(_BasicChecker):
             self.stats['undocumented_'+node_type] += 1
             self.add_message('empty-docstring', node=node, args=(node_type,),
                              confidence=confidence)
+        # Docstring First Line Empty
+        elif docstring and docstring[0] == '\n':
+            self.add_message('docstring-first-line-empty', node=node,
+                             args=(node_type,), confidence=confidence)
+        # Bad Docstring Quotes
+        # I had to use "file_stream" because node.as_string() renders contents
+        # of the file and change triple single quotes by triple double quotes
+        elif docstring:
+            lineno = node.fromlineno
+            line = node.root().file_stream.readlines()[lineno].lstrip()
+            line = line.decode('utf-8')
+            if line and '"""' in line:
+                return
+            quotes = line and '\'\'\'' in line and '\'\'\'' or line and \
+                line[0] == '"' and '"' or line and line[0] == '\'' and \
+                '\'' or False
+            if quotes:
+                self.add_message('bad-docstring-quotes',
+                                 node=node, args=(node_type, quotes),
+                                 confidence=confidence)
 
 
 class PassChecker(_BasicChecker):

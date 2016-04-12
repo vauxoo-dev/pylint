@@ -53,7 +53,7 @@ class NonRegrTC(unittest.TestCase):
     def test_package___init___precedence(self):
         linter.check('precedence_test')
         got = linter.reporter.finalize().strip()
-        self.assertEqual(got, '')
+        self.assertEqual(got, 'C:  1: First line empty in module docstring')
 
     def test_check_package___init__(self):
         for variation in ('package.__init__', join(REGR_DATA, 'package', '__init__.py')):
@@ -137,7 +137,7 @@ class NonRegrTC(unittest.TestCase):
     def test_absolute_import(self):
         linter.check(join(REGR_DATA, 'absimp', 'string.py'))
         got = linter.reporter.finalize().strip()
-        self.assertEqual(got, "")
+        self.assertEqual(got, "C:  1: First line empty in module docstring")
 
     def test_no_context_file(self):
         expected = "Unused import missing"

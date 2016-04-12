@@ -57,8 +57,8 @@ import six
 
 
 def _get_env():
-    '''Extracts the environment PYTHONPATH and appends the current sys.path to
-    those.'''
+    """Extracts the environment PYTHONPATH and appends the current sys.path to
+    those."""
     env = dict(os.environ)
     env['PYTHONPATH'] = os.pathsep.join(sys.path)
     return env

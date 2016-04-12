@@ -1,4 +1,4 @@
-# pylint: disable=R0903, print-statement
+# pylint: disable=R0903, print-statement,bad-docstring-quotes
 """for Sub.inherited, only the warning for "aay" is desired.
 The warnings for "aab" and "aac"  are most likely false positives though,
 because there could be another subclass that overrides the same method and does

@@ -437,8 +437,7 @@ accessed. Python regular expressions are accepted.'}
                 self.add_message('assignment-from-none', node=node)
 
     def _check_uninferable_callfunc(self, node):
-        """
-        Check that the given uninferable CallFunc node does not
+        """ Check that the given uninferable CallFunc node does not
         call an actual function.
         """
         if not isinstance(node.func, astroid.Attribute):
@@ -906,8 +905,7 @@ accessed. Python regular expressions are accepted.'}
 
 
 class IterableChecker(BaseChecker):
-    """
-    Checks for non-iterables used in an iterable context.
+    """Checks for non-iterables used in an iterable context.
     Contexts include:
     - for-statement
     - starargs in function call

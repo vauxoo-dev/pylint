@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-"""
-generic classes/functions for pyreverse core/extensions
+""" generic classes/functions for pyreverse core/extensions
 """
 from __future__ import print_function
 
@@ -28,8 +27,7 @@ import sys
 RCFILE = '.pyreverserc'
 
 def get_default_options():
-    """
-    Read config file and return list of options
+    """ Read config file and return list of options
     """
     options = []
     home = os.environ.get('HOME', '')

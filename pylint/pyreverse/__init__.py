@@ -1,5 +1,4 @@
-"""
-pyreverse.extensions
+""" pyreverse.extensions
 """
 
 __revision__ = "$Id $"

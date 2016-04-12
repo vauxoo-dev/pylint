@@ -1,7 +1,7 @@
 """Check unpacking non-sequences in assignments. """
 
 # pylint: disable=too-few-public-methods, invalid-name, attribute-defined-outside-init, unused-variable, no-absolute-import
-# pylint: disable=using-constant-test, no-init
+# pylint: disable=using-constant-test, no-init, bad-docstring-quotes
 from os import rename as nonseq_func
 from six import with_metaclass
 from functional.unpacking import nonseq

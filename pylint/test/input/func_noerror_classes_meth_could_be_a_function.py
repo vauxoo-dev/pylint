@@ -1,4 +1,4 @@
-# pylint: disable=C0111,R0903,W0232
+# pylint: disable=C0111,R0903,W0232,docstring-first-line-empty
 """
 #2479
 

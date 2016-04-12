@@ -1,4 +1,4 @@
-# pylint: disable=R0903
+# pylint: disable=R0903,docstring-first-line-empty,bad-docstring-quotes
 """
 False positive case of E1101:
 

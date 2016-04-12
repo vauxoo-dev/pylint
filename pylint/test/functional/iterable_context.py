@@ -2,7 +2,7 @@
 Checks that primitive values are not used in an
 iterating/mapping context.
 """
-# pylint: disable=missing-docstring,invalid-name,too-few-public-methods,no-init,no-self-use,import-error,unused-argument,bad-mcs-method-argument,wrong-import-position
+# pylint: disable=missing-docstring,invalid-name,too-few-public-methods,no-init,no-self-use,import-error,unused-argument,bad-mcs-method-argument,wrong-import-position,docstring-first-line-empty,bad-docstring-quotes
 from __future__ import print_function
 
 # primitives

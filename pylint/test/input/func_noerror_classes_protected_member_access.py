@@ -1,9 +1,10 @@
+# pylint: disable=no-classmethod-decorator, no-staticmethod-decorator, docstring-first-line-empty
 """
 #3123: W0212 false positive on static method
 """
 __revision__ = 1
 
-# pylint: disable=no-classmethod-decorator, no-staticmethod-decorator
+
 class A3123(object):
     """oypuee"""
     _protected = 1

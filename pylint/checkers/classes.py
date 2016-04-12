@@ -141,8 +141,7 @@ def _has_bare_super_call(fundef_node):
     return False
 
 def _safe_infer_call_result(node, caller, context=None):
-    """
-    Safely infer the return value of a function.
+    """Safely infer the return value of a function.
 
     Returns None if inference failed or if there is some ambiguity (more than
     one node has been inferred). Otherwise returns infered value.
@@ -375,8 +374,7 @@ a metaclass class method.'}
             pass
 
     def _check_proper_bases(self, node):
-        """
-        Detect that a class inherits something which is not
+        """Detect that a class inherits something which is not
         a class or a type.
         """
         for base in node.bases:
@@ -675,7 +673,7 @@ a metaclass class method.'}
             self.add_message(msg, node=node.targets[0])
 
     def _check_protected_attribute_access(self, node):
-        '''Given an attribute access node (set or get), check if attribute
+        """Given an attribute access node (set or get), check if attribute
         access is legitimate. Call _check_first_attr with node before calling
         this method. Valid cases are:
         * self._attr in a method or cls._attr in a classmethod. Checked by
@@ -683,7 +681,7 @@ a metaclass class method.'}
         * Klass._attr inside "Klass" class.
         * Klass2._attr inside "Klass" class when Klass2 is a base class of
             Klass.
-        '''
+        """
         attrname = node.attrname
 
         if (is_attr_protected(attrname) and

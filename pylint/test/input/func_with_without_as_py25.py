@@ -1,6 +1,6 @@
 '''This is a little non regression test on a with statement
 without 'as'.
-'''
+''' # pylint: disable=bad-docstring-quotes
 from __future__ import with_statement, print_function
 __revision__ = 32321313
 

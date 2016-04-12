@@ -1,4 +1,4 @@
-# pylint: disable=C0111,R0201
+# pylint: disable=C0111,R0201,docstring-first-line-empty
 """
 FUNCTIONALITY
 """

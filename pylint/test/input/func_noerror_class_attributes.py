@@ -1,4 +1,4 @@
-"""Test that valid class attribute doesn't trigger errors"""
+"""Test that valid class attribute doesn't trigger errors""" # pylint: disable=bad-docstring-quotes
 __revision__ = 'sponge bob'
 
 class Clazz(object):

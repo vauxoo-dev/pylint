@@ -1,7 +1,7 @@
 """
 Check for indexing exceptions.
 """
-# pylint: disable=import-error, no-absolute-import
+# pylint: disable=import-error, no-absolute-import, docstring-first-line-empty
 
 from unknown import ExtensionException
 __revision__ = 0

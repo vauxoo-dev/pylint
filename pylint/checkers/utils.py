@@ -437,8 +437,7 @@ def get_argument_from_call(callfunc_node, position=None, keyword=None):
     raise NoSuchArgumentError
 
 def inherit_from_std_ex(node):
-    """
-    Return true if the given class node is subclass of
+    """Return true if the given class node is subclass of
     exceptions.Exception.
     """
     if node.name in ('Exception', 'BaseException') \
@@ -448,8 +447,7 @@ def inherit_from_std_ex(node):
                for parent in node.ancestors(recurs=False))
 
 def error_of_type(handler, error_type):
-    """
-    Check if the given exception handler catches
+    """Check if the given exception handler catches
     the given error_type.
 
     The *handler* parameter is a node, representing an ExceptHandler node.
@@ -499,8 +497,7 @@ def decorated_with(func, qnames):
 
 
 def unimplemented_abstract_methods(node, is_abstract_cb=None):
-    """
-    Get the unimplemented abstract methods for the given *node*.
+    """Get the unimplemented abstract methods for the given *node*.
 
     A method can be considered abstract if the callback *is_abstract_cb*
     returns a ``True`` value. The check defaults to verifying that

@@ -1,7 +1,7 @@
 """
 #3205: W0704 (except doesn't do anything) false positive if some statements
 follow a "pass"
-"""
+""" # pylint: disable=docstring-first-line-empty
 from __future__ import print_function
 __revision__ = None
 

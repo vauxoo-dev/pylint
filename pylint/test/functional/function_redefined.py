@@ -1,4 +1,4 @@
-# pylint: disable=R0201,missing-docstring,using-constant-test
+# pylint: disable=R0201,missing-docstring,using-constant-test,bad-docstring-quotes
 from __future__ import division
 __revision__ = ''
 

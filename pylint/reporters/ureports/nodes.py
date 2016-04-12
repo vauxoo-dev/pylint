@@ -45,8 +45,7 @@ class VNode(object):
         child.parent = self
 
     def _get_visit_name(self):
-        """
-        return the visit name for the mixed class. When calling 'accept', the
+        """ return the visit name for the mixed class. When calling 'accept', the
         method <'visit_' + name returned by this method> will be called on the
         visitor
         """

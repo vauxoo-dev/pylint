@@ -138,10 +138,10 @@ def normalize_node_id(nid):
     return '"%s"' % nid
 
 def get_cycles(graph_dict, vertices=None):
-    '''given a dictionary representing an ordered graph (i.e. key are vertices
+    """given a dictionary representing an ordered graph (i.e. key are vertices
     and values is a list of destination vertices representing edges), return a
     list of detected cycles
-    '''
+    """
     if not graph_dict:
         return ()
     result = []
