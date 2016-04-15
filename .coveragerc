@@ -1,6 +1,7 @@
-[report]
-include =
-    */pylint/*/pylint/*
+[paths]
+source =
+   pylint
 
+[report]
 omit =
     */test/*
