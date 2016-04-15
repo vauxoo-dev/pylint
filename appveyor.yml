@@ -3,6 +3,9 @@ build: off
 cache:
   - 'C:\\tmp'
 environment:
+  global:
+    # Please, change to use token of PyCQA/pylint
+    COVERALLS_REPO_TOKEN: "####"
   matrix:
     - PYTHON: "C:\\Python27"
       TOXENV: "py27"
@@ -28,7 +31,11 @@ install:
   - 'python -m tox --version'
 
 test_script:
+  - 'python -m tox -e coverage-erase'
   - 'python -m tox'
+
+on_success:
+  - 'python -m tox -e coveralls'
 
 on_failure:
   - ps: dir "env:"
