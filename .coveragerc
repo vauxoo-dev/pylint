@@ -1,7 +1,6 @@
 [paths]
 source =
-   .tox/*/lib/python*/site-packages/pylint
-   .tox/pypy/site-packages/pylint
+   pylint
 
 [report]
 omit =
