@@ -1,6 +1,8 @@
-[report]
-include =
-    */pylint/*/pylint/*
+[paths]
+source =
+   .tox/*/lib/python*/site-packages/pylint
+   .tox/pypy/site-packages/pylint
 
+[report]
 omit =
     */test/*
