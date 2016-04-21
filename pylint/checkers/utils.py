@@ -721,12 +721,3 @@ def has_known_bases(klass, context=None):
             return False
     klass._all_bases_known = True
     return True
-
-
-@contextlib.contextmanager
-def ___nostdout():
-    """No print ouput of a sub-method that used sys.stdout"""
-    save_stdout = sys.stdout
-    sys.stdout = cStringIO.StringIO()
-    yield
-    sys.stdout = save_stdout
