@@ -488,7 +488,7 @@ given file (report RP0402 must not be disabled)'}
         isort_obj = isort.SortImports(file_contents='')
         for node, modname in self._imports_stack:
             package = modname.split('.')[0]
-            import_category = isort_obj.place_module(modname)
+            import_category = isort_obj.place_module(package)
             if import_category in ('FUTURE', 'STDLIB'):
                 std_imports.append((node, package))
                 wrong_import = extern_imports or local_imports
