@@ -503,7 +503,6 @@ given file (report RP0402 must not be disabled)'}
         extern_imports = []
         local_imports = []
         std_imports = []
-        # TODO: Add parameters to known libraries category
         isort_obj = isort.SortImports(
             file_contents='', known_third_party=self.config.known_third_party,
             known_standard_library=self.config.known_standard_library,
