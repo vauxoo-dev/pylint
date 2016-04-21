@@ -225,8 +225,8 @@ MSGS = {
     }
 
 
-DEFAULT_STANDARD_LIBRARY = ''
-DEFAULT_KNOWN_THIRD_PARTY = 'enchant'
+DEFAULT_STANDARD_LIBRARY = ()
+DEFAULT_KNOWN_THIRD_PARTY = ('enchant',)
 
 
 class ImportsChecker(BaseChecker):
@@ -281,14 +281,14 @@ given file (report RP0402 must not be disabled)'}
                  'metavar': '<modules>',
                  'help': 'Force import order to recognize a module as part of' \
                          ' the standard compatibility libraries.'}
-               )
+               ),
                ('known-third-party',
                 {'default': DEFAULT_KNOWN_THIRD_PARTY,
                  'type': 'csv',
                  'metavar': '<modules>',
                  'help': 'Force import order to recognize a module as part of' \
                          ' a third party library.'}
-               )
+               ),
 
               )
 
