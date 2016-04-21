@@ -481,20 +481,33 @@ given file (report RP0402 must not be disabled)'}
 
         Imports must follow this order: standard, 3rd party, local
         """
-        if self._imports_stack:
-            imports_stack_as_string = '\n'.join([
-                import_stack[0].as_string()
-                for import_stack in self._imports_stack])
-            with nostdout():
-                # parameter check=True show a print 'error' silent with nostdout
-                isort_obj = isort.SortImports(
-                    file_contents=imports_stack_as_string, check=True)
-            if isort_obj.incorrectly_sorted:
-                import pdb;pdb.set_trace()
-                self.add_message('wrong-import-order', node=self._imports_stack[0][0],
-                                 args=('standard import %s' % imports_stack_as_string,
-                                       'Try with %s' % isort_obj.output,
-                                       ))
+        extern_imports = []
+        local_imports = []
+        std_imports = []
+        # TODO: Add parameters to known libraries category
+        isort_obj = isort.SortImports(file_contents='')
+        for node, modname in self._imports_stack:
+            package = modname.split('.')[0]
+            import_category = isort_obj.place_module(modname)
+            if import_category in ('FUTURE', 'STDLIB'):
+                std_imports.append((node, package))
+                wrong_import = extern_imports or local_imports
+                if wrong_import:
+                    self.add_message('wrong-import-order', node=node,
+                                     args=('standard import "%s"' % node.as_string(),
+                                           '"%s"' % wrong_import[0][0].as_string()))
+            elif import_category == 'THIRDPARTY':
+                extern_imports.append((node, package))
+                wrong_import = local_imports
+                if wrong_import:
+                    self.add_message('wrong-import-order', node=node,
+                                     args=('external import "%s"' % node.as_string(),
+                                           '"%s"' % wrong_import[0][0].as_string()))
+            elif import_category in ('FIRSTPARTY', 'LOCALFOLDER'):
+                local_imports.append((node, package))
+            else:
+                raise BaseException('Bad import category %s', import_category)
+
         return std_imports, extern_imports, local_imports
 
     def _get_imported_module(self, importnode, modname):

@@ -734,10 +734,6 @@ def ___nostdout():
     sys.stdout = save_stdout
 
 
-
-import contextlib
-import sys
-
 class DummyFile(object):
     def __init__(self, output):
         self.output = output
@@ -745,6 +741,7 @@ class DummyFile(object):
     def write(self, output):
         if self.output is not None:
             self.output.append(output)
+
 
 @contextlib.contextmanager
 def nostdout(output=None):
