@@ -17,8 +17,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """some functions that may be useful for various checkers
 """
-import contextlib
-import cStringIO
 import functools
 import re
 import sys
@@ -731,25 +729,4 @@ def ___nostdout():
     save_stdout = sys.stdout
     sys.stdout = cStringIO.StringIO()
     yield
-    sys.stdout = save_stdout
-
-
-class DummyFile(object):
-    def __init__(self, output):
-        self.output = output
-
-    def write(self, output):
-        if self.output is not None:
-            self.output.append(output)
-
-
-@contextlib.contextmanager
-def nostdout(output=None):
-    """Save print and sys.stdout methods to variable output
-    :param list output: A empty list to store stdout."""
-    save_stdout = sys.stdout
-    sys.stdout = DummyFile(output)
-    yield
-    if output is not None:
-        output = [''.join(sys.stdout.output)]
     sys.stdout = save_stdout
