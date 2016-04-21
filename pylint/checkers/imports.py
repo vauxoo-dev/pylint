@@ -26,11 +26,12 @@ import astroid
 from astroid import are_exclusive
 from astroid.modutils import (get_module_part, is_standard_module,
                               file_from_modpath)
+import isort
 
 from pylint.interfaces import IAstroidChecker
 from pylint.utils import EmptyReport, get_global_option
 from pylint.checkers import BaseChecker
-from pylint.checkers.utils import check_messages, node_ignores_exception
+from pylint.checkers.utils import check_messages, node_ignores_exception, nostdout
 from pylint.graph import get_cycles, DotBackend
 from pylint.reporters.ureports.nodes import VerbatimText, Paragraph
 
@@ -480,39 +481,20 @@ given file (report RP0402 must not be disabled)'}
 
         Imports must follow this order: standard, 3rd party, local
         """
-        extern_imports = []
-        local_imports = []
-        std_imports = []
-        for node, modname in self._imports_stack:
-            package = modname.split('.')[0]
-            if is_standard_module(modname):
-                std_imports.append((node, package))
-                wrong_import = extern_imports or local_imports
-                if not wrong_import:
-                    continue
-                if self._is_fallback_import(node, wrong_import):
-                    continue
-                self.add_message('wrong-import-order', node=node,
-                                 args=('standard import "%s"' % node.as_string(),
-                                       '"%s"' % wrong_import[0][0].as_string()))
-            else:
-                try:
-                    filename = file_from_modpath([package])
-                except ImportError:
-                    continue
-                if not filename:
-                    continue
-
-                filename = os.path.normcase(os.path.abspath(filename))
-                if not any(filename.startswith(path) for path in self._site_packages):
-                    local_imports.append((node, package))
-                    continue
-                extern_imports.append((node, package))
-                if not local_imports:
-                    continue
-                self.add_message('wrong-import-order', node=node,
-                                 args=('external import "%s"' % node.as_string(),
-                                       '"%s"' % local_imports[0][0].as_string()))
+        if self._imports_stack:
+            imports_stack_as_string = '\n'.join([
+                import_stack[0].as_string()
+                for import_stack in self._imports_stack])
+            with nostdout():
+                # parameter check=True show a print 'error' silent with nostdout
+                isort_obj = isort.SortImports(
+                    file_contents=imports_stack_as_string, check=True)
+            if isort_obj.incorrectly_sorted:
+                import pdb;pdb.set_trace()
+                self.add_message('wrong-import-order', node=self._imports_stack[0][0],
+                                 args=('standard import %s' % imports_stack_as_string,
+                                       'Try with %s' % isort_obj.output,
+                                       ))
         return std_imports, extern_imports, local_imports
 
     def _get_imported_module(self, importnode, modname):
