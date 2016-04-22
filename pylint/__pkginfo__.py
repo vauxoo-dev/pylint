@@ -29,6 +29,7 @@ version = '.'.join([str(num) for num in numversion])
 install_requires = [
     'astroid >= 1.5.0,<1.6.0',
     'six',
+    'mccabe ==  0.4.0',
 ]
 
 if sys.platform == 'win32':
