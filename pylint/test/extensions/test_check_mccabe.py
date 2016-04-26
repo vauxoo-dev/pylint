@@ -50,7 +50,7 @@ class TestMcCabeMethodChecker(unittest.TestCase):
             osp.dirname(osp.abspath(__file__)), 'data', 'mccabe.py')
         self._linter.check([mccabe_test])
         real_msgs = [message.msg for message in self._linter.reporter.messages]
-        self.assertEqual(self.expected_msgs, real_msgs)
+        self.assertEqual(sorted(self.expected_msgs), sorted(real_msgs))
 
 
 if __name__ == '__main__':
