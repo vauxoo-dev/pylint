@@ -60,6 +60,8 @@ class McCabeASTVisitor(PathGraphingAstVisitor):
             self.graphs["%s%s" % (self.classname, node.name)] = self.graph
             self.reset()
 
+    visitAsyncFunctionDef = visitFunctionDef
+
     def preorder(self, tree, visitor, *args):
         """Do preorder walk of tree using visitor"""
         self.visitor = visitor
@@ -72,7 +74,7 @@ class McCabeASTVisitor(PathGraphingAstVisitor):
     visitAssert = visitAssign = visitAugAssign = visitDelete = visitPrint = \
             visitRaise = visitYield = visitImport = visitCall = visitSubscript = \
             visitPass = visitContinue = visitBreak = visitGlobal = visitReturn = \
-            visitExpr = visitSimpleStatement
+            visitExpr = visitAwait = visitSimpleStatement
 
     def visitIf(self, node):
         name = "If %d" % node.lineno
