@@ -109,6 +109,21 @@ class PathGraphingAstVisitor(Mccabe_PathGraphingAstVisitor):
             self.tail = bottom
 
 
+def get_fails_expected():
+    import re
+    regex_str = r"(?P<path>[A-Za-z0-9-._/]+):(?P<lineno>\d+):\d+: C901 (?P<sentence>'(.*)'+) is too complex \((?P<rate>\d+)\)"
+    regex = re.compile(regex_str)
+    mydict = {}
+    with open('/Users/moylop260/odoo/pylint/flake8_mccabe.txt') as fp:
+        for line in fp:
+            regex_match = regex.match(line)
+            if regex_match:
+                mydict[(regex_match.group('path'), regex_match.group('lineno'))] = regex_match.group('rate')
+            else:
+                print "line not detected", line
+    return mydict
+
+
 class McCabeMethodChecker(BaseChecker):
     """Checks McCabe complexity cyclomatic threshold in methods and functions
     to validate a too complex code.
@@ -149,9 +164,21 @@ class McCabeMethodChecker(BaseChecker):
                 node_name = "%s %d" % (node.__class__.__name__, node.lineno)
             if complexity <= self.config.max_complexity:
                 continue
+            key = (node.root().path, str(node.lineno))
+            if not key in self.mydict:
+                print "key not found", key
+                import pdb;pdb.set_trace()
+            else:
+                expected_complexity = self.mydict.pop(key)
+                if expected_complexity != str(complexity):
+                    print "%s:%s" % key,
+                    print " expected_complexity %s vs real %s" % (expected_complexity, complexity)
+                    import pdb;pdb.set_trace()
             self.add_message(
                 'too-complex', node=node, confidence=HIGH,
                 args=(node_name, complexity))
+            if len(self.mydict) <= 3:
+                print "self.mydict", self.mydict
 
 
 def register(linter):
@@ -160,4 +187,7 @@ def register(linter):
     :param linter: Main interface object for Pylint plugins
     :type linter: Pylint object
     """
-    linter.register_checker(McCabeMethodChecker(linter))
+    mydict = get_fails_expected()
+    obj = McCabeMethodChecker(linter)
+    obj.mydict = mydict
+    linter.register_checker(obj)
