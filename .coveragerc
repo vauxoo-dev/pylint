@@ -7,3 +7,7 @@ include =
     pylint/*
 omit =
     */test/*
+
+exclude_lines =
+    # Don't complain about register method that don't is executed in tests
+    def register(linter):
