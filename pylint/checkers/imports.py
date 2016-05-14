@@ -517,38 +517,52 @@ given file (report RP0402 must not be disabled)'}
         extern_imports = []
         local_imports = []
         std_imports = []
+        extern_imports_nested = []
+        local_imports_nested = []
+        std_imports_nested = []
         isort_obj = isort.SortImports(
             file_contents='', known_third_party=self.config.known_third_party,
             known_standard_library=self.config.known_standard_library,
         )
         for node, modname in self._imports_stack:
-            wrong_import = None
-            wrong_by = None
             if modname.startswith('.'):
                 package = '.' + modname.split('.')[1]
             else:
                 package = modname.split('.')[0]
 
             import_category = isort_obj.place_module(package)
+            nested = False if isinstance(node.parent, astroid.Module) else True
             if import_category in ('FUTURE', 'STDLIB'):
-                std_imports.append((node, package))
+                if nested:
+                    std_imports_nested.append((node, package))
+                else:
+                    std_imports.append((node, package))
                 wrong_import = extern_imports or local_imports
                 if self._is_fallback_import(node, wrong_import):
                     continue
-                wrong_by = 'standard' if wrong_import else None
+                if wrong_import and not nested:
+                    self.add_message('wrong-import-order', node=node,
+                                     args=('standard import "%s"' % node.as_string(),
+                                           '"%s"' % wrong_import[0][0].as_string()))
             elif import_category in ('FIRSTPARTY', 'THIRDPARTY'):
-                extern_imports.append((node, package))
+                if nested:
+                    extern_imports_nested.append((node, package))
+                else:
+                    extern_imports.append((node, package))
                 wrong_import = local_imports
-                wrong_by = 'external' if wrong_import else None
+                if wrong_import and not nested:
+                    self.add_message('wrong-import-order', node=node,
+                                     args=('external import "%s"' % node.as_string(),
+                                           '"%s"' % wrong_import[0][0].as_string()))
             elif import_category == 'LOCALFOLDER':
-                local_imports.append((node, package))
-            if wrong_by and isinstance(node.parent, astroid.Module):
-                self.add_message(
-                    'wrong-import-order', node=node, args=(
-                        wrong_by + ' import "%s"' % node.as_string(),
-                        '"%s"' % wrong_import[0][0].as_string()))
+                if nested:
+                    local_imports_nested.append((node, package))
+                else:
+                    local_imports.append((node, package))
 
-        return std_imports, extern_imports, local_imports
+        return std_imports + std_imports_nested, \
+            extern_imports + extern_imports_nested, \
+            local_imports + local_imports_nested
 
     def _get_imported_module(self, importnode, modname):
         try:
