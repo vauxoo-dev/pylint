@@ -359,7 +359,7 @@ given file (report RP0402 must not be disabled)'}
         for name in names:
             self._check_deprecated_module(node, name)
             importedmodnode = self._get_imported_module(node, name)
-            if isinstance(node.scope(), astroid.Module):
+            if isinstance(node.parent, astroid.Module):
                 self._check_position(node)
                 self._record_import(node, importedmodnode)
 
@@ -381,7 +381,7 @@ given file (report RP0402 must not be disabled)'}
 
         modnode = node.root()
         importedmodnode = self._get_imported_module(node, basename)
-        if isinstance(node.scope(), astroid.Module):
+        if isinstance(node.parent, astroid.Module):
             self._check_position(node)
             self._record_import(node, importedmodnode)
         if importedmodnode is None:
