@@ -1,11 +1,5 @@
 """Checks import order rule"""
 # pylint: disable=unused-import,relative-import,ungrouped-imports,import-error,no-name-in-module,relative-beyond-top-level
-try:
-    # imports nested skipped
-    from six.moves import configparser
-except ImportError:
-    import configparser
-
 import logging
 
 import six
