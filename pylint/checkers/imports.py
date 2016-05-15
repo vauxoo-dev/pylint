@@ -514,55 +514,44 @@ given file (report RP0402 must not be disabled)'}
 
         Imports must follow this order: standard, 3rd party, local
         """
-        extern_imports = []
-        local_imports = []
-        std_imports = []
-        extern_imports_nested = []
-        local_imports_nested = []
-        std_imports_nested = []
+        imports = {}
+        isort2keys = {
+            'FUTURE': 'standard',
+            'STDLIB': 'standard',
+            'FIRSTPARTY': 'external',
+            'THIRDPARTY': 'external',
+            'LOCALFOLDER': 'local',
+        }
         isort_obj = isort.SortImports(
             file_contents='', known_third_party=self.config.known_third_party,
             known_standard_library=self.config.known_standard_library,
         )
         for node, modname in self._imports_stack:
-            if modname.startswith('.'):
-                package = '.' + modname.split('.')[1]
-            else:
-                package = modname.split('.')[0]
-
-            import_category = isort_obj.place_module(package)
-            nested = False if isinstance(node.parent, astroid.Module) else True
-            if import_category in ('FUTURE', 'STDLIB'):
-                if nested:
-                    std_imports_nested.append((node, package))
-                else:
-                    std_imports.append((node, package))
-                wrong_import = extern_imports or local_imports
+            package = '.' + modname.split('.')[1] if modname.startswith('.') \
+                else modname.split('.')[0]
+            isort_category = isort_obj.place_module(package)
+            category = isort2keys.get(isort_category, '')
+            # to share the same pointer of memory in list.append sentences
+            node_pack = (node, package)
+            imports.setdefault(category + '_all', []).append(node_pack)
+            category += '_nested' \
+                if not isinstance(node.parent, astroid.Module) else ''
+            imports.setdefault(category, []).append(node_pack)
+            wrong_import = imports.get('local', []) \
+                if 'external' in category else None
+            if not wrong_import and 'standard' in category:
+                wrong_import = imports.get('external', []) or \
+                    imports.get('local', [])
                 if self._is_fallback_import(node, wrong_import):
                     continue
-                if wrong_import and not nested:
-                    self.add_message('wrong-import-order', node=node,
-                                     args=('standard import "%s"' % node.as_string(),
-                                           '"%s"' % wrong_import[0][0].as_string()))
-            elif import_category in ('FIRSTPARTY', 'THIRDPARTY'):
-                if nested:
-                    extern_imports_nested.append((node, package))
-                else:
-                    extern_imports.append((node, package))
-                wrong_import = local_imports
-                if wrong_import and not nested:
-                    self.add_message('wrong-import-order', node=node,
-                                     args=('external import "%s"' % node.as_string(),
-                                           '"%s"' % wrong_import[0][0].as_string()))
-            elif import_category == 'LOCALFOLDER':
-                if nested:
-                    local_imports_nested.append((node, package))
-                else:
-                    local_imports.append((node, package))
-
-        return std_imports + std_imports_nested, \
-            extern_imports + extern_imports_nested, \
-            local_imports + local_imports_nested
+            if wrong_import and 'nested' not in category:
+                self.add_message(
+                    'wrong-import-order', node=node,
+                    args=(category + ' import "%s"' % node.as_string(),
+                          '"%s"' % wrong_import[0][0].as_string()))
+        return tuple(
+            imports.get(key, [])
+            for key in ['standard_all', 'external_all', 'local_all'])
 
     def _get_imported_module(self, importnode, modname):
         try:
