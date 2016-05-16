@@ -6,4 +6,5 @@ try:
 except ImportError:
     pass
 
-import os  # [wrong-import-position]
+# TODO: Flake8 don't show error in this case
+import os
