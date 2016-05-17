@@ -360,6 +360,7 @@ given file (report RP0402 must not be disabled)'}
             self._check_deprecated_module(node, name)
             importedmodnode = self._get_imported_module(node, name)
             if isinstance(node.parent, astroid.Module):
+                # Allow imports nested
                 self._check_position(node)
             # else:
             #     # A nested import is skipped but is a non_import_node
@@ -429,7 +430,11 @@ given file (report RP0402 must not be disabled)'}
             return
         if not isinstance(node.parent, astroid.Module):
             return
-        if any(node.nodes_of_class((astroid.Import, astroid.ImportFrom))):
+        nested_allowed = [astroid.TryExcept, astroid.TryFinally]
+        is_nested_allowed = [
+            allowed for allowed in nested_allowed if isinstance(node, allowed)]
+        if any(node.nodes_of_class((astroid.Import, astroid.ImportFrom))) and \
+                is_nested_allowed:
             return
         self._first_non_import_node = node
 
