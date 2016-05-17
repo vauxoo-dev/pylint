@@ -361,9 +361,9 @@ given file (report RP0402 must not be disabled)'}
             importedmodnode = self._get_imported_module(node, name)
             if isinstance(node.parent, astroid.Module):
                 self._check_position(node)
-            else:
-                # A nested import is skipped but is a non_import_node
-                self._first_non_import_node = node.parent
+            # else:
+            #     # A nested import is skipped but is a non_import_node
+            #     self._first_non_import_node = node.parent
             if isinstance(node.scope(), astroid.Module):
                 self._record_import(node, importedmodnode)
 
@@ -387,9 +387,9 @@ given file (report RP0402 must not be disabled)'}
         importedmodnode = self._get_imported_module(node, basename)
         if isinstance(node.parent, astroid.Module):
             self._check_position(node)
-        else:
-            # A nested import is skipped but is a non_import_node
-            self._first_non_import_node = node.parent
+        # else:
+        #     # A nested import is skipped but is a non_import_node
+        #     self._first_non_import_node = node.parent
         if isinstance(node.scope(), astroid.Module):
             self._record_import(node, importedmodnode)
         if importedmodnode is None:
