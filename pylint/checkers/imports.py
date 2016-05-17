@@ -428,8 +428,8 @@ given file (report RP0402 must not be disabled)'}
         nested_allowed = [astroid.TryExcept, astroid.TryFinally]
         is_nested_allowed = [
             allowed for allowed in nested_allowed if isinstance(node, allowed)]
-        if any(node.nodes_of_class((astroid.Import, astroid.ImportFrom))) and \
-                is_nested_allowed:
+        if is_nested_allowed and \
+                any(node.nodes_of_class((astroid.Import, astroid.ImportFrom))):
             return
         self._first_non_import_node = node
 
