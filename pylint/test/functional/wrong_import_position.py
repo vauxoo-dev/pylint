@@ -10,6 +10,12 @@ try:
 except ImportError:
     class Myclass(object):
         """docstring"""
+        def meth2(self):
+            """docstring"""
+            pass
+    def method1():
+        """docstring"""
+        pass
 
 if sys.version_info[0] == 3:
     from collections import OrderedDict
