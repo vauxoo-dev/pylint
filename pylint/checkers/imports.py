@@ -434,7 +434,7 @@ given file (report RP0402 must not be disabled)'}
         self._first_non_import_node = node
 
     visit_tryfinally = visit_tryexcept = visit_assignattr = visit_assign \
-            = visit_ifexp = visit_comprehension = visit_if
+            = visit_ifexp = visit_comprehension = visit_expr = visit_if
 
     def visit_functiondef(self, node):
         # If it is the first non import instruction of the module, record it.
