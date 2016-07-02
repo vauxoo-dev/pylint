@@ -1144,3 +1144,18 @@ def _rest_format_section(stream, section, options, encoding=None, doc=None):
             value = _encode(_format_option_value(optdict, value), encoding)
             print(file=stream)
             print('  Default: ``%s``' % value.replace("`` ", "```` ``"), file=stream)
+
+
+def get_duplicated(items):
+    """Get duplicated items
+    :param items: Iterable items
+    :return: List with items duplicated
+    """
+    unique_items = set()
+    duplicated_items = set()
+    for item in items:
+        if item in unique_items:
+            duplicated_items.add(item)
+        else:
+            unique_items.add(item)
+    return list(duplicated_items)
