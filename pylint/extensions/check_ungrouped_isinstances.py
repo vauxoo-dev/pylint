@@ -25,6 +25,8 @@ class UngroupedIsinstancesChecker(checkers.BaseChecker):
     @check_messages(*(MSGS.keys()))
     def visit_boolop(self, node):
         "Check ungrouped isinstances"
+        if node.op != 'or':
+            return
         first_args = [
             value.args[0].as_string()
             for value in node.values

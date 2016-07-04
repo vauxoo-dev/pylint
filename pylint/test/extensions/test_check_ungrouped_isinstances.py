@@ -30,6 +30,8 @@ class TestUngroupedIsinstancesChecker(unittest.TestCase):
         "Use 'isinstance(var3, (class1, class2, ...))' instead",
         "isinstances of 'var4' are not grouped. "
         "Use 'isinstance(var4, (class1, class2, ...))' instead",
+        "isinstances of 'var5' are not grouped. "
+        "Use 'isinstance(var5, (class1, class2, ...))' instead",
     ]
 
     @classmethod
