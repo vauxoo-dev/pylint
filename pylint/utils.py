@@ -1148,8 +1148,9 @@ def _rest_format_section(stream, section, options, encoding=None, doc=None):
 
 def get_duplicated(items):
     """Get duplicated items
-    :param items: Iterable items
-    :return: List with items duplicated
+    :param iter items: Items to extract duplicated
+    :returns: Duplicated extracted from items
+    :rtype: list
     """
     unique_items = set()
     duplicated_items = set()
