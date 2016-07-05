@@ -1,6 +1,3 @@
 [Messages Control]
 disable=all
 enable=consider-merging-isinstance
-
-[MASTER]
-load-plugins=pylint.extensions.check_consider_merging_isinstance

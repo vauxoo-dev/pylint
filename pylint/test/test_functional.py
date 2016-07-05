@@ -21,6 +21,10 @@ from pylint import lint
 from pylint import reporters
 from pylint import utils
 
+from pylint.extensions.check_consider_merging_isinstance \
+    import register as register_check_consider_merging_isinstance
+
+
 class test_dialect(csv.excel):
     if sys.version_info[0] < 3:
         delimiter = b':'
@@ -226,6 +230,7 @@ class LintModuleTest(unittest.TestCase):
         self._linter.set_reporter(test_reporter)
         self._linter.config.persistent = 0
         checkers.initialize(self._linter)
+        register_check_consider_merging_isinstance(self._linter)
         self._linter.disable('I')
         try:
             self._linter.read_config_file(test_file.option_file)
