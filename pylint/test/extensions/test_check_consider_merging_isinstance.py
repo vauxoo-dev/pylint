@@ -8,7 +8,7 @@ import os.path as osp
 import unittest
 
 from pylint import checkers
-from pylint.extensions.consider_merging_isinstance import register
+from pylint.extensions.check_consider_merging_isinstance import register
 from pylint.lint import PyLinter
 from pylint.reporters import BaseReporter
 
@@ -32,6 +32,8 @@ class TestConsiderMergingIsinstanceChecker(unittest.TestCase):
         "Consider merging 'isinstance(var4, (class1, class2, ...))'",
         "isinstances of 'var5' are not merged. "
         "Consider merging 'isinstance(var5, (class1, class2, ...))'",
+        "isinstances of 'var6' are not merged. "
+        "Consider merging 'isinstance(var6, (class1, class2, ...))'",
     ]
 
     @classmethod

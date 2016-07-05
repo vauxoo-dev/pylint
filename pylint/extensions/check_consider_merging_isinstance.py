@@ -6,7 +6,7 @@
 import astroid
 
 from pylint import checkers, utils
-from pylint.checkers.utils import check_messages
+from pylint.checkers.utils import check_messages, is_builtin_object, safe_infer
 from pylint.interfaces import IAstroidChecker
 
 MSGS = {
@@ -24,14 +24,15 @@ class ConsiderMergingIsinstanceChecker(checkers.BaseChecker):
 
     @check_messages(*(MSGS.keys()))
     def visit_boolop(self, node):
-        "Check not merged isinstances"
+        "Check not merged isinstance"
         if node.op != 'or':
             return
         first_args = [
             value.args[0].as_string()
             for value in node.values
             if isinstance(value, astroid.Call) and value.args and
-            value.func.name == 'isinstance']
+            is_builtin_object(safe_infer(value.func)) and
+            safe_infer(value.func).name == 'isinstance']
         for duplicated_name in utils.get_duplicated(first_args):
             self.add_message('consider-merging-isinstance', node=node,
                              args=(duplicated_name, duplicated_name))
