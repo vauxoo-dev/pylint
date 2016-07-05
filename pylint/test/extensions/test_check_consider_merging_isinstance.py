@@ -1,14 +1,14 @@
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-"""Tests for the pylint checker in :mod:`pylint.extensions.check_ungrouped_isinstances
+"""Tests for the pylint checker in :mod:`pylint.extensions.consider_merging_isinstance
 """
 
 import os.path as osp
 import unittest
 
 from pylint import checkers
-from pylint.extensions.check_ungrouped_isinstances import register
+from pylint.extensions.consider_merging_isinstance import register
 from pylint.lint import PyLinter
 from pylint.reporters import BaseReporter
 
@@ -22,16 +22,16 @@ class TestReporter(BaseReporter):
         self.messages = []
 
 
-class TestUngroupedIsinstancesChecker(unittest.TestCase):
-    """Test ungrouped isinstances Checker"""
+class TestConsiderMergingIsinstanceChecker(unittest.TestCase):
+    """Test consider merging isinstances Checker"""
 
     expected_msgs = [
-        "isinstances of 'var3' are not grouped. "
-        "Use 'isinstance(var3, (class1, class2, ...))' instead",
-        "isinstances of 'var4' are not grouped. "
-        "Use 'isinstance(var4, (class1, class2, ...))' instead",
-        "isinstances of 'var5' are not grouped. "
-        "Use 'isinstance(var5, (class1, class2, ...))' instead",
+        "isinstances of 'var3' are not merged. "
+        "Consider merging 'isinstance(var3, (class1, class2, ...))'",
+        "isinstances of 'var4' are not merged. "
+        "Consider merging 'isinstance(var4, (class1, class2, ...))'",
+        "isinstances of 'var5' are not merged. "
+        "Consider merging 'isinstance(var5, (class1, class2, ...))'",
     ]
 
     @classmethod
@@ -41,14 +41,14 @@ class TestUngroupedIsinstancesChecker(unittest.TestCase):
         checkers.initialize(cls._linter)
         register(cls._linter)
         cls._linter.disable('all')
-        cls._linter.enable('ungrouped-isinstances')
+        cls._linter.enable('consider-merging-isinstance')
 
     def setUp(self):
         self.fname_example = osp.join(
             osp.dirname(osp.abspath(__file__)), 'data',
-            'ungrouped_isinstances.py')
+            'consider_merging_isinstance.py')
 
-    def test_too_ungrouped_isinstances_message(self):
+    def test_consider_merging_isinstance_message(self):
         self._linter.check([self.fname_example])
         real_msgs = [message.msg for message in self._linter.reporter.messages]
         self.assertEqual(sorted(self.expected_msgs), sorted(real_msgs))
