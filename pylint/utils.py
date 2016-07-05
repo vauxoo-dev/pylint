@@ -1152,11 +1152,5 @@ def get_duplicated(items):
     :returns: Duplicated extracted from items
     :rtype: list
     """
-    unique_items = set()
-    duplicated_items = set()
-    for item in items:
-        if item in unique_items:
-            duplicated_items.add(item)
-        else:
-            unique_items.add(item)
-    return list(duplicated_items)
+    items_counter = collections.Counter(items)
+    return [item for item, counter in items_counter.items() if counter > 1]
