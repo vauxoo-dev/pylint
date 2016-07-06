@@ -67,8 +67,7 @@ class RefactoryChecker(BaseChecker):
         "Check not merged isinstance"
         if node.op != 'or':
             return
-        first_args = [first_arg for first_arg in self._get_first_args(node)]
-        for duplicated_name in get_duplicated(first_args):
+        for duplicated_name in get_duplicated(self._get_first_args(node)):
             self.add_message('consider-merging-isinstance', node=node,
                              args=(duplicated_name, duplicated_name))
 
