@@ -88,6 +88,10 @@ Release date: tba
 
       Closes issue #984.
 
+    * Added a new refactory message, 'consider-merging-isinstance', which is
+      emitted when the built-in method `isinstance` is used many times with
+      the same object in `or` operations.
+
 
 What's new in Pylint 1.6.2?
 ===========================
