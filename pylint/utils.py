@@ -1144,13 +1144,3 @@ def _rest_format_section(stream, section, options, encoding=None, doc=None):
             value = _encode(_format_option_value(optdict, value), encoding)
             print(file=stream)
             print('  Default: ``%s``' % value.replace("`` ", "```` ``"), file=stream)
-
-
-def get_duplicated(items):
-    """Get duplicated items
-    :param iter items: Items to extract duplicated
-    :returns: Duplicated extracted from items
-    :rtype: list
-    """
-    items_counter = collections.Counter(items)
-    return [item for item, counter in items_counter.items() if counter > 1]
