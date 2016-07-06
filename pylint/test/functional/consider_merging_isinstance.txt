@@ -1,4 +1,4 @@
-consider-merging-isinstance:14::isinstances of 'var3' are not merged. Consider merging 'isinstance(var3, (class1, class2, ...))'
-consider-merging-isinstance:16::isinstances of 'var4' are not merged. Consider merging 'isinstance(var4, (class1, class2, ...))'
-consider-merging-isinstance:18::isinstances of 'var5' are not merged. Consider merging 'isinstance(var5, (class1, class2, ...))'
-consider-merging-isinstance:21::isinstances of 'var6' are not merged. Consider merging 'isinstance(var6, (class1, class2, ...))'
+consider-merging-isinstance:14:isinstances:isinstances of 'var3' are not merged. Consider merging 'isinstance(var3, (class1, class2, ...))'
+consider-merging-isinstance:16:isinstances:isinstances of 'var4' are not merged. Consider merging 'isinstance(var4, (class1, class2, ...))'
+consider-merging-isinstance:18:isinstances:isinstances of 'var5' are not merged. Consider merging 'isinstance(var5, (class1, class2, ...))'
+consider-merging-isinstance:21:isinstances:isinstances of 'var6' are not merged. Consider merging 'isinstance(var6, (class1, class2, ...))'
