@@ -44,7 +44,10 @@ class RefactoryChecker(BaseChecker):
     msgs = MSGS
     priority = -2
 
-    def _get_first_args(self, node):
+    @staticmethod
+    def _get_first_args(node):
+        # pylint: disable=redundant-returns-doc
+        # yield is a type of return
         """Get first item of all node.args as string of method 'isinstance'.
         :param astroid.BoolOp node: Node to get first argument of values
         :returns: First arguments as string of all `node.values`
