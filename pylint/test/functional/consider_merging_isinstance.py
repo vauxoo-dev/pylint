@@ -1,7 +1,8 @@
 """Checks use of consider-merging-isinstance"""
+# pylint:disable=line-too-long,bad-option-value,unpacking-non-sequence
 
 
-def isinstances(self):
+def isinstances():
     "Examples of isinstances"
     var1, var2, var3, var4, var5, var6, var7 = 85
 
@@ -19,3 +20,6 @@ def isinstances(self):
 
     infered_isinstance = isinstance
     result = infered_isinstance(var6, int) or infered_isinstance(var6, long) or infered_isinstance(var6, list) and False   # [consider-merging-isinstance]
+    result = isinstance(var6, int) or isinstance(var7, long)
+    result = isinstance(var6, int) or isinstance(var7, int)
+    return result

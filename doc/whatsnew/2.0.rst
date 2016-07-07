@@ -59,6 +59,8 @@ Removed Changes
 Added features
 ==============
 
-* New refactory message 'consider-merging-isinstance', which is emitted
-  when the built-in method `isinstance` is used many times with
-  the same object in `or` operations.
+* Refactoring message, 'consider-merging-isinstance', which is
+  used to check the type of the same object, with different calls, in the
+  same chained boolean operation.
+  Consider merging instance `isinstance(var1, (int, long))` instead of
+  `isinstance(var1, int) or isinstance(var, long)`

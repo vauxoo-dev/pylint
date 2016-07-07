@@ -1,7 +1,7 @@
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-"""check to consider a refactory of code"""
+"""Looks for code which can be refactored."""
 
 import collections
 
@@ -12,43 +12,34 @@ from pylint.checkers import BaseChecker
 from pylint.checkers.utils import check_messages, is_builtin_object, safe_infer
 
 
-MSGS = {
-    'R1701': (
-        "isinstances of '%s' are not merged. "
-        "Consider merging 'isinstance(%s, (class1, class2, ...))'",
-        "consider-merging-isinstance",
-        "Used when isinstance methods are not grouped by object"),
-}
-
-
-def get_duplicated(items):
-    """Get duplicated items
-    :param iter items: Items to extract duplicated
-    :returns: Duplicated items retrieved from the given argument.
-    :rtype: list
-    """
+def _get_duplicated(items):
     items_counter = collections.Counter(items)
     return [item for item, counter in items_counter.items() if counter > 1]
 
 
-class RefactoryChecker(BaseChecker):
-    """Checks to consider a refactory of code
-    * isinstance merging
+class RefactoringChecker(BaseChecker):
+    """Looks for code which can be refactored.
     """
 
     __implements__ = (IAstroidChecker,)
 
     # configuration section name
-    name = 'refactory'
+    name = 'refactoring'
 
-    msgs = MSGS
+    msgs = {
+        'R1701': (
+            "Consider merging these isinstance calls to %s.",
+            "consider-merging-isinstance",
+            "Usen when multiple isinstance calls can be grouped into one."),
+    }
     priority = -2
 
     @staticmethod
     def _get_first_args(node):
         # pylint: disable=redundant-returns-doc
         # yield is a type of return
-        """Get first item of all node.args as string of method 'isinstance'.
+        """Get the objects, as strings, from the *isinstance* calls,
+        found in the BoolOp node.
         :param astroid.BoolOp node: Node to get first argument of values
         :returns: First arguments as string of all `node.values`
         :rtype: generator
@@ -62,16 +53,16 @@ class RefactoryChecker(BaseChecker):
             if inferred.name == 'isinstance':
                 yield value.args[0].as_string()
 
-    @check_messages(*(MSGS.keys()))
+    @check_messages('consider-merging-isinstance')
     def visit_boolop(self, node):
-        "Check not merged isinstance"
+        "Check isinstance calls which can be merged together."
         if node.op != 'or':
             return
-        for duplicated_name in get_duplicated(self._get_first_args(node)):
+        for duplicated_name in _get_duplicated(self._get_first_args(node)):
             self.add_message('consider-merging-isinstance', node=node,
-                             args=(duplicated_name, duplicated_name))
+                             args=(duplicated_name,))
 
 
 def register(linter):
     """required method to auto register this checker """
-    linter.register_checker(RefactoryChecker(linter))
+    linter.register_checker(RefactoringChecker(linter))
