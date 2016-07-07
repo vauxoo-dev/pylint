@@ -22,4 +22,7 @@ def isinstances():
     result = infered_isinstance(var[6], int) or infered_isinstance(var[6], float) or infered_isinstance(var[6], list) and False   # [consider-merging-isinstance]
     result = isinstance(var[6], int) or isinstance(var[7], float)
     result = isinstance(var[6], int) or isinstance(var[7], int)
+
+    # not merged but valid because have a logic that depends of the result
+    result = isinstance(var[5], int) and var[5] * 14 or isinstance(var[5], float) and var[5] * 14.4
     return result
