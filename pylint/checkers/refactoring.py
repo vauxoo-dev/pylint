@@ -36,8 +36,8 @@ class RefactoringChecker(BaseChecker):
 
     @staticmethod
     def first_args(node):
+        # TODO: Remove after fix https://github.com/PyCQA/pylint/issues/984
         # pylint: disable=redundant-returns-doc
-        # yield is a type of return
         """Get the objects, as strings, from the *isinstance* calls,
         found in the BoolOp node.
         :param astroid.BoolOp node: Node to get first argument of values
