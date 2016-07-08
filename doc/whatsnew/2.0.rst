@@ -65,5 +65,5 @@ Added features
 .. code-block:: python
 
     $ cat a.py
-    isinstance(x, int) or isinstance(z, int)
+    isinstance(x, int) or isinstance(x, float)
     # R:  1, 0: Consider merging these isinstance calls to x. (consider-merging-isinstance)
