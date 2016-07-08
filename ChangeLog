@@ -89,8 +89,7 @@ Release date: tba
       Closes issue #984.
 
     * Added a new refactoring message, 'consider-merging-isinstance', which is
-      used to check the type of the same object, with different calls, in the
-	  same chained boolean operation.
+      used to detect isinstance calls, which can be merged together.
 
 
 What's new in Pylint 1.6.2?

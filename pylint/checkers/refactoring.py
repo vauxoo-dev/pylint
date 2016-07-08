@@ -12,7 +12,7 @@ from pylint.checkers import BaseChecker
 from pylint.checkers.utils import check_messages, is_builtin_object, safe_infer
 
 
-def _get_duplicated(items):
+def duplicated(items):
     items_counter = collections.Counter(items)
     return [item for item, counter in items_counter.items() if counter > 1]
 
@@ -35,7 +35,7 @@ class RefactoringChecker(BaseChecker):
     priority = -2
 
     @staticmethod
-    def _get_first_args(node):
+    def first_args(node):
         # pylint: disable=redundant-returns-doc
         # yield is a type of return
         """Get the objects, as strings, from the *isinstance* calls,
@@ -58,7 +58,7 @@ class RefactoringChecker(BaseChecker):
         "Check isinstance calls which can be merged together."
         if node.op != 'or':
             return
-        for duplicated_name in _get_duplicated(self._get_first_args(node)):
+        for duplicated_name in duplicated(self.first_args(node)):
             self.add_message('consider-merging-isinstance', node=node,
                              args=(duplicated_name,))
 
