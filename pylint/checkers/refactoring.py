@@ -50,18 +50,19 @@ class RefactoringChecker(BaseChecker):
                 if first_arg in first_args:
                     duplicated.append(first_arg)
                 else:
-                    first_args[first_arg] = []
+                    first_args[first_arg] = set()
                 if isinstance(value.args[1], astroid.Tuple):
-                    first_args[first_arg].extend([
+                    first_args[first_arg].update([
                         class_type.as_string() for class_type in value.args[1].itered()])
                 else:
-                    first_args[first_arg].append(value.args[1].as_string())
+                    first_args[first_arg].add(value.args[1].as_string())
         # Remove all keys not duplicated
         for key in list(first_args):
             if key not in duplicated:
                 first_args.pop(key)
             else:
-                first_args[key] = sorted(list(set(first_args[key])))
+                first_args[key] = list(first_args[key])
+                first_args[key].sort()
         return first_args
 
     @check_messages('consider-merging-isinstance')
