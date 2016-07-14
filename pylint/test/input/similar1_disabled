@@ -1,4 +1,6 @@
-# pylint: disable=duplicate-code
+# comment 0
+# comment 1
+# pylint: disable=R0801
 import one
 from two import two
 three
