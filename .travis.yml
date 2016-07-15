@@ -29,7 +29,7 @@ install:
 script:
   - tox -e $TOXENV
 after_success:
-  - codecov
+  - cd ${TRAVIS_BUILD_DIR}/.tox/$TOXENV && codecov
 after_failure:
   - more .tox/log/* | cat
   - more .tox/*/log/* | cat
