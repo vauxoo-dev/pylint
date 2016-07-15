@@ -27,7 +27,7 @@ install:
   - tox --version
   - codecov --version
 script:
-  - tox -e coverage-erase,$TOXENV
+  - tox -e $TOXENV
 after_success:
   - codecov
 after_failure:
