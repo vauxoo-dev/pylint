@@ -290,7 +290,7 @@ class SimilarChecker(BaseChecker, Similar):
         if not self.linter.is_message_enabled('R0801') or not node.body:
             return
 
-        for top_line in range(1, node.body[0].lineno):
+        for top_line in range(1, node.body[0].lineno + 1):
             if not self.linter.is_message_enabled('R0801', top_line):
                 return
         with node.stream() as stream:
