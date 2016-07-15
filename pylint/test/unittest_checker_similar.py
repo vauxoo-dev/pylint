@@ -10,7 +10,6 @@ import six
 from pylint.checkers import similar
 
 SIMILAR1 = join(dirname(abspath(__file__)), 'input', 'similar1')
-SIMILAR1_DISABLED = SIMILAR1 + '_disabled'
 SIMILAR2 = join(dirname(abspath(__file__)), 'input', 'similar2')
 
 class SimilarTC(unittest.TestCase):
@@ -119,23 +118,6 @@ TOTAL lines=44 duplicates=0 percent=0.00
    five
 TOTAL lines=44 duplicates=5 percent=11.36
 """ % (SIMILAR1, SIMILAR2)).strip())
-
-    def test_ignore_disable_comment(self):
-        sys.stdout = six.StringIO()
-        try:
-            similar.Run([SIMILAR1_DISABLED, SIMILAR2])
-        except SystemExit as ex:
-            self.assertEqual(ex.code, 0)
-            output = sys.stdout.getvalue()
-        else:
-            self.fail('not system exit')
-        finally:
-            sys.stdout = sys.__stdout__
-        import pdb;pdb.set_trace()
-        self.assertMultiLineEqual(output.strip(), """
-TOTAL lines=44 duplicates=0 percent=0.00
-""".strip())
-
 
     def test_help(self):
         sys.stdout = six.StringIO()
