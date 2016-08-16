@@ -233,13 +233,15 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         return False
 
     def _check_superfluous_else_return(self, node):
+        if not node.orelse:
+            return
         alwr = self._always_return(node.body)
         is_elif = self._is_actual_elif(node)
-        if is_elif and not alwr and \
-                node.orelse[0] in self._else_return_nodes:
-            self._else_return_nodes.remove(node.orelse[0])
-        if not is_elif and alwr and self._always_return(node.orelse):
+        is_if = not is_elif
+        if is_if and alwr and self._always_return(node.orelse):
             self._else_return_nodes.append(node.orelse[0])
+        elif is_elif and not alwr and node.orelse[0] in self._else_return_nodes:
+            self._else_return_nodes.remove(node.orelse[0])
 
     @utils.check_messages('too-many-nested-blocks', 'simplifiable-if-statement',
                           'superfluous-else-return',)
