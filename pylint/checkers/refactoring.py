@@ -225,26 +225,15 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     def visit_comprehension(self, node):
         self._if_counter += len(node.ifs)
 
-    def _always_return(self, node):
+    def _always_return(self, body):
         """Search if a node has a way without return"""
-        items = node
-        if not isinstance(node, list):
-            items = node.body
-        for item in items:
+        for item in body:
             if isinstance(item, astroid.Return):
                 return True
-            if isinstance(item, astroid.If):
-                pass
-                # TODO: Consider "always return" nested:
-                # if x:  # This node has a "always return" nested
-                #   if y:
-                #     return y
-                #   else:
-                #     return x
         return False
 
     def _check_superfluous_else_return(self, node):
-        alwr = self._always_return(node)
+        alwr = self._always_return(node.body)
         is_elif = self._is_actual_elif(node)
         if is_elif and not alwr and \
                 node.orelse[0] in self._else_return_nodes:
