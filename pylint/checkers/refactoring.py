@@ -52,7 +52,13 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                   'suggest a potential error. This is taken in account only for '
                   'a handful of name binding operations, such as for iteration, '
                   'with statement assignment and exception handler assignment.'
-                 )
+                 ),
+        'R1705': ('Superfluous return before else',
+                  'superfluous-else-return',
+                  'If an "if" block contains a return statement, '
+                  'the else block becomes unnecessary. Its contents can'
+                  ' be placed outside of the block.'
+                 ),
     }
     options = (('max-nested-blocks',
                 {'default': 5, 'type': 'int', 'metavar': '<int>',
@@ -71,6 +77,7 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         self._elifs = []
         self._if_counter = 0
         self._nested_blocks_msg = None
+        self._else_return_nodes = []
 
     @decorators.cachedproperty
     def _dummy_rgx(self):
@@ -163,6 +170,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                 self._elifs.append(False)
 
     def leave_module(self, _):
+        for else_return_node in self._else_return_nodes:
+            self.add_message('superfluous-else-return', node=else_return_node)
         self._init()
 
     @utils.check_messages('too-many-nested-blocks')
@@ -216,10 +225,39 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     def visit_comprehension(self, node):
         self._if_counter += len(node.ifs)
 
-    @utils.check_messages('too-many-nested-blocks', 'simplifiable-if-statement')
+    def _always_return(self, node):
+        """Search if a node has a way without return"""
+        items = node
+        if not isinstance(node, list):
+            items = node.body
+        for item in items:
+            if isinstance(item, astroid.Return):
+                return True
+            if isinstance(item, astroid.If):
+                pass
+                # TODO: Consider "always return" nested:
+                # if x:  # This node has a "always return" nested
+                #   if y:
+                #     return y
+                #   else:
+                #     return x
+        return False
+
+    def _check_superfluous_else_return(self, node):
+        alwr = self._always_return(node)
+        is_elif = self._is_actual_elif(node)
+        if is_elif and not alwr and \
+                node.orelse[0] in self._else_return_nodes:
+            self._else_return_nodes.remove(node.orelse[0])
+        if not is_elif and alwr and self._always_return(node.orelse):
+            self._else_return_nodes.append(node.orelse[0])
+
+    @utils.check_messages('too-many-nested-blocks', 'simplifiable-if-statement',
+                          'superfluous-else-return',)
     def visit_if(self, node):
         self._check_simplifiable_if(node)
         self._check_nested_blocks(node)
+        self._check_superfluous_else_return(node)
         self._if_counter += 1
 
     @utils.check_messages('too-many-nested-blocks')
