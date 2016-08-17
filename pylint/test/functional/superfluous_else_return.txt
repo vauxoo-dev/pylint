@@ -1,0 +1,5 @@
+superfluous-else-return:9:isinstances:Superfluous return before else
+superfluous-else-return:18:isinstances:Superfluous return before else
+superfluous-else-return:21:isinstances:Superfluous return before else
+superfluous-else-return:32:isinstances:Superfluous return before else
+superfluous-else-return:35:isinstances:Superfluous return before else

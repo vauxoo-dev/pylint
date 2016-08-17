@@ -77,7 +77,6 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         self._elifs = []
         self._if_counter = 0
         self._nested_blocks_msg = None
-        self._else_return_nodes = []
 
     @decorators.cachedproperty
     def _dummy_rgx(self):
@@ -170,8 +169,6 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                 self._elifs.append(False)
 
     def leave_module(self, _):
-        for else_return_node in self._else_return_nodes:
-            self.add_message('superfluous-else-return', node=else_return_node)
         self._init()
 
     @utils.check_messages('too-many-nested-blocks')
@@ -226,22 +223,40 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         self._if_counter += len(node.ifs)
 
     def _always_return(self, body):
-        """Search if a node has a way without return"""
+        """Search if a list of node has 'return', search nested return into ifs
+        """
+        alwr_all = []
         for item in body:
             if isinstance(item, astroid.Return):
                 return True
-        return False
+            elif isinstance(item, astroid.If):
+                if not hasattr(item, 'alwr_if'):
+                    # Assign variable to object in order to re-use computed data
+                    item.alwr_if = self._always_return(item.body)
+                    item.alwr_else = self._always_return(item.orelse) \
+                        if item.orelse else False
+                alwr_all.append(item.alwr_if and item.alwr_else)
+        return all(alwr_all) if alwr_all else False
+
+    def _get_lineno_last_else(self, node):
+        if self._is_actual_elif(node):
+            return node.lineno
+        orelse = node.orelse
+        while not orelse or isinstance(orelse[0], astroid.If):
+            orelse = orelse[0].orelse
+        return orelse[0].lineno - 1
 
     def _check_superfluous_else_return(self, node):
         if not node.orelse:
+            # Not interested in if statements without else.
             return
-        alwr = self._always_return(node.body)
-        is_elif = self._is_actual_elif(node)
-        is_if = not is_elif
-        if is_if and alwr and self._always_return(node.orelse):
-            self._else_return_nodes.append(node.orelse[0])
-        elif is_elif and not alwr and node.orelse[0] in self._else_return_nodes:
-            self._else_return_nodes.remove(node.orelse[0])
+        if not hasattr(node, 'alwr_if'):
+            # If we can not re-use computed data, then calculate
+            node.alwr_if = self._always_return(node.body)
+            node.alwr_else = self._always_return(node.orelse)
+        if node.alwr_if and node.alwr_else:
+            line = self._get_lineno_last_else(node)
+            self.add_message('superfluous-else-return', node=node, line=line)
 
     @utils.check_messages('too-many-nested-blocks', 'simplifiable-if-statement',
                           'superfluous-else-return',)
