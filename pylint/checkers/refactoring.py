@@ -238,7 +238,6 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                 alwr_all.append(item.alwr_if and item.alwr_else)
         return all(alwr_all) if alwr_all else False
 
-
     def _check_superfluous_else_return(self, node):
         if not node.orelse:
             # Not interested in if statements without else.
