@@ -241,9 +241,15 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     def _get_lineno_last_else(self, node):
         if self._is_actual_elif(node):
             return node.lineno
+        if not node.orelse:
+            return node.lineno
+        original_if_counter = self._if_counter
+        self._if_counter += 1
         orelse = node.orelse
         while self._is_actual_elif(orelse[0]):
             orelse = orelse[0].orelse
+            self._if_counter += 1
+        self._if_counter = original_if_counter
         return orelse[0].lineno - 1
 
     def _check_superfluous_else_return(self, node):
@@ -255,8 +261,6 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             node.alwr_if = self._always_return(node.body)
             node.alwr_else = self._always_return(node.orelse)
         if node.alwr_if and node.alwr_else and not self._is_actual_elif(node):
-            if self._get_lineno_last_else(node) == 17:
-                import pdb;pdb.set_trace()
             line = self._get_lineno_last_else(node)
             self.add_message('superfluous-else-return', node=node, line=line)
 
