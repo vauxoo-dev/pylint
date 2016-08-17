@@ -15,7 +15,7 @@ def foo2(x, y, w, z):
     if x:
         a = 1
         return y
-    elif z:  # [superfluous-else-return]
+    elif z:
         b = 2
         return w
     else:  # [superfluous-else-return]
