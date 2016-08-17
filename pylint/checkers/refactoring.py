@@ -242,7 +242,7 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         if self._is_actual_elif(node):
             return node.lineno
         orelse = node.orelse
-        while not orelse or isinstance(orelse[0], astroid.If):
+        while self._is_actual_elif(orelse[0]):
             orelse = orelse[0].orelse
         return orelse[0].lineno - 1
 
@@ -255,6 +255,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             node.alwr_if = self._always_return(node.body)
             node.alwr_else = self._always_return(node.orelse)
         if node.alwr_if and node.alwr_else and not self._is_actual_elif(node):
+            if self._get_lineno_last_else(node) == 17:
+                import pdb;pdb.set_trace()
             line = self._get_lineno_last_else(node)
             self.add_message('superfluous-else-return', node=node, line=line)
 
