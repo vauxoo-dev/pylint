@@ -1175,6 +1175,7 @@ class VariablesChecker(BaseChecker):
                                  args=(_get_unpacking_extra_info(node, infered),))
 
 
+    @profile
     def _check_module_attrs(self, node, module, module_names):
         """check that module_names (list of string) are accessible through the
         given module
