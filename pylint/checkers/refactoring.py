@@ -102,6 +102,10 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                   'weird bugs in your code. You should always use parentheses '
                   'explicitly for creating a tuple.',
                   {'minversion': (3, 0)}),
+        'R1708': ("The mutable (%s) sequence was modified inside the loop",
+                  'mutable-sequence-modified-in-loop',
+                  'Modification within the cycle may cause each iteration to'
+                  'have an index that is not as expected'),
     }
     options = (('max-nested-blocks',
                 {'default': 5, 'type': 'int', 'metavar': '<int>',
@@ -261,12 +265,31 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                                  args=(name_node.name, ))
 
     @utils.check_messages('redefined-argument-from-local',
-                          'too-many-nested-blocks')
+                          'too-many-nested-blocks',
+                          'mutable-sequence-modified-in-loop')
     def visit_for(self, node):
         self._check_nested_blocks(node)
 
         for name in node.target.nodes_of_class(astroid.AssignName):
             self._check_redefined_argument_from_local(name)
+
+        try:
+            if (isinstance(node.iter, astroid.Name) and
+                    node.iter.inferred() and
+                    node.iter.infered()[0]._type != 'class' and
+                    node.body):
+                for part in node.nodes_of_class(astroid.Expr):
+                    if (isinstance(part.value, astroid.Call) and
+                            isinstance(part.value.func,
+                                       astroid.Attribute) and
+                            part.value.func.attrname in ('remove', 'delete',
+                                                         'pop') and
+                            part.value.func.expr.name == node.iter.name):
+                        self.add_message('mutable-sequence-modified-in-loop',
+                                         node=part,
+                                         args=(node.iter.name))
+        except astroid.exceptions.InferenceError:
+            pass
 
     @utils.check_messages('redefined-argument-from-local')
     def visit_excepthandler(self, node):
