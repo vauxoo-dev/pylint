@@ -7,7 +7,7 @@ Summary -- Release highlights
 With 2.14 ``pylint`` only supports Python version 3.7.2 and above.
 
 We introduced several new checks among which ``duplicate-value`` for sets,
-``comparison-of-constants``, and checks related to lambdas. We removed ``no-init`` and
+``comparison-of-constants``, ``missing-timeout`` and checks related to lambdas. We removed ``no-init`` and
 made ``no-self-use`` optional as they were too opinionated. We also added an option
 to generate a toml configuration: ``--generate-toml-config``.
 
@@ -29,6 +29,8 @@ to contribute to ``pylint`` or open source without any experience with our code!
 
 New checkers
 ============
+
+* Added new checker ``missing-timeout``.
 
 * Added new checker ``comparison-of-constants``.
 

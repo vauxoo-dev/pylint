@@ -5,6 +5,7 @@ What's New in Pylint 2.14.0?
 ----------------------------
 Release date: TBA
 
+* Added new checker ``missing-timeout``.
 
 * The refactoring checker now also raises 'consider-using-generator' messages for
   ``max()``, ``min()`` and ``sum()``.
